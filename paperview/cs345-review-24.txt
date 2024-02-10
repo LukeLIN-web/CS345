@@ -1,0 +1,63 @@
+==+== CS345 Paper Review Form
+==-== DO NOT CHANGE LINES THAT START WITH "==+==" UNLESS DIRECTED!
+==-== For further guidance, or to upload this file when you are done, go to:
+==-== https://hotcrp.kaust.edu.sa/cs345/offline
+
+==+== =====================================================================
+==+== Begin Review #24.
+==+== Reviewer: Juyi Lin <LINJ>
+
+==+== Paper #24
+==-== Title: Arrakis: The Operating System is the Control Plane
+
+==+== Review Readiness
+==-== Enter "Ready" if the review is ready for others to see:
+
+Ready
+
+==+== A. Overall merit
+==-== Choices:
+==-==    1. Reject
+==-==    2. Weak reject
+==-==    3. Weak accept
+==-==    4. Accept
+==-==    5. Strong accept
+==-== Enter the number of your choice:
+
+(Your choice here)
+
+==+== B. Paper summary
+
+
+
+Data center systems and I/O devices require a nanosecond-scale operating system ('ns-scale OS') to keep latency within a few microseconds. However, the overhead of traditional kernel-based operating systems is too high. Hence, the concept of kernel-bypass is introduced. By virtualization, it is possible to increase I/O throughput and reduce latency, freeing the I/O datapath from the kernel.
+
+
+==+== C. Strengths
+==-==    What are the paper’s strengths? Just a couple sentences, please.
+
+Arrakis can skip the kernel and deliver I/O directly to the application layer, reducing kernel overhead. The result shows that REDIS SET latency was reduced by 81%, and throughput improved 9x. This system also has good scalability. The memcached transaction throughput improved by 3.1x with four cores.
+
+
+
+==+== D. Weaknesses
+==-==    What are the paper’s weaknesses? Just a couple sentences,
+==-==    please.
+
+
+1. Due to the limited filtering support of the 82599 NIC, they use a different MAC address for each VNIC. The latest NIC may not need such software overhead.
+2. Implementation of the virtual function driver does not currently support the “transmit descriptor head writeback” feature of the 82599, which could improve network speed. 
+3. The RS3 RAID controller they used in their experiments does not support SR-IOV or VSAs. So, they use a more complex implementation.
+
+
+==+== E. Detailed comments
+
+
+1. The figures is good and clear.
+2. The evaluation proves that Arrakis has notable speed up than Linux.
+3. The idea is quite natural and easy to understand. To ensure fast data flow, it is essential to minimize the latency caused by the control layer. Arrakis leverages the control functionalities provided by the kernel, extracting certain control layer features. These features come into play only when necessary, such as during configuration and initialization, allowing the data plane to focus on transmitting data. 
+
+
+==+== Scratchpad (for unsaved private notes)
+
+==+== End Review
