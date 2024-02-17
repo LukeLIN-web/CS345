@@ -1,0 +1,65 @@
+==+== CS345 Paper Review Form
+==-== DO NOT CHANGE LINES THAT START WITH "==+==" UNLESS DIRECTED!
+==-== For further guidance, or to upload this file when you are done, go to:
+==-== https://hotcrp.kaust.edu.sa/cs345/offline
+
+==+== =====================================================================
+==+== Begin Review #25.
+==+== Reviewer: Juyi Lin <LINJ>
+
+==+== Paper #25
+==-== Title: FaRM: Fast Remote Memory
+
+==+== Review Readiness
+==-== Enter "Ready" if the review is ready for others to see:
+
+Ready
+
+==+== A. Overall merit
+==-== Choices:
+==-==    1. Reject
+==-==    2. Weak reject
+==-==    3. Weak accept
+==-==    4. Accept
+==-==    5. Strong accept
+==-== Enter the number of your choice:
+
+5
+
+==+== B. Paper summary
+
+The bottleneck arises from the desire to efficiently utilize the cluster memory uniformly, with the TCP/IP network between physical machines becoming a limiting factor. FaRM exposes the memory of machines in the cluster as a shared address space. Applications can use transactions to allocate, read, write, and free objects in the address space with location transparency. FaRM provides two mechanisms to improve performance where required: lock-free reads over RDMA, and support for collocating objects and function shipping to enable the use of efficient single machine transactions. FaRM uses RDMA both to directly access data in the shared address space and for fast messaging and is carefully tuned for the best RDMA performance.
+
+==+== C. Strengths
+==-==    What are the paper’s strengths? Just a couple sentences, please.
+
+1. FaRM uses RDMA writes to implement a much faster message passing primitive.
+2. Programmers do not need to concern the specific location of objects within address space.
+
+
+==+== D. Weaknesses
+==-==    What are the paper’s weaknesses? Just a couple sentences,
+==-==    please.
+
+
+1. It provides strict serializability for committed but not for aborted transactions.
+2. It imposes a large burden on developers.
+
+==+== E. Detailed comments
+
+
+Strengths:
+1. FaRM uses RDMA writes to implement a fast message passing primitive that achieves an order-of-magnitude improvement in message rate and latency relative to TCP/IP on the same Ethernet network. They provide micro-benchmark to support that FaRM’s communication primitives can achieve both low latency and high message rates at the same time.
+2. All machines in the cluster share a unified address space in which memory is organized. The shared address space consists of multiple 2GB memory regions, with each region serving as the basic unit for address mapping, data recovery, and RDMA registration to the NIC. A general Key/Value store interface is implemented on this shared address space.
+3. The transactional implementation relies on a 2-phase commit protocol implemented using RDMA. Although RDMA reduces the time to hold locks, the performance of this protocol remains poor. To enhance performance, two approaches are employed: 1) providing lock-free reads and 2) executing objects and their corresponding computations as much as possible on a single machine, thereby replacing distributed transactions with local transactions.
+
+
+Weakness:
+1. Optimistically executing transactions in these systems might read inconsistent state with
+the guarantee that such transactions would eventually abort. refer Fast General Distributed Transactions with Opacity. SIGMOD, 2019.
+2. It uses optimistic concurrency control do not provide read snapshots for aborted transactions, This design decision can improve performance but it imposes a large burden on developers. Since developers cannot assume invariants hold, they must program defensively by checking for invariants explicitly in transaction code. 
+
+
+==+== Scratchpad (for unsaved private notes)
+
+==+== End Review

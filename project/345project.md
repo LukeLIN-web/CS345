@@ -30,9 +30,21 @@
 
 •The goal is to convince both us and yourself that your project is neither too small nor too big
 
-
-
 •Include group members, if any
 
 •Schedule via email a 15-minute meeting to discuss
+
+
+
+
+
+#### 英语论文写作tip
+
+1. 不要缩写, it is, does not 都不要缩写. 
+2. 不要用using, 
+3. 谷歌 synonym propose 来找一些关键词.
+4. 解释每个术语.
+5. 摘要不用缩写NN ,DL. 正文才要. 
+
+
 

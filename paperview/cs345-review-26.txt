@@ -1,0 +1,61 @@
+==+== CS345 Paper Review Form
+==-== DO NOT CHANGE LINES THAT START WITH "==+==" UNLESS DIRECTED!
+==-== For further guidance, or to upload this file when you are done, go to:
+==-== https://hotcrp.kaust.edu.sa/cs345/offline
+
+==+== =====================================================================
+==+== Begin Review #26.
+==+== Reviewer: Juyi Lin <LINJ>
+
+==+== Paper #26
+==-== Title: Datacenter RPCs can be General and Fast
+
+==+== Review Readiness
+==-== Enter "Ready" if the review is ready for others to see:
+
+Ready
+
+==+== A. Overall merit
+==-== Choices:
+==-==    1. Reject
+==-==    2. Weak reject
+==-==    3. Weak accept
+==-==    4. Accept
+==-==    5. Strong accept
+==-== Enter the number of your choice:
+
+5
+
+==+== B. Paper summary
+
+Previously, we customed datacenter systems for RDMA, lossless networks, FPGAs, and programmable switches. This paper shows that such specialization is not necessary. They proposed eRPC, a new general-purpose remote procedure call (RPC) library that offers performance comparable to specialized systems. eRPC 
+
+
+==+== C. Strengths
+==-==    What are the paper’s strengths? Just a couple sentences, please.
+
+1. eRPC performs well in three key metrics: message rate for small messages; bandwidth for large messages; and scalability to a large number of nodes and CPU cores.
+2. eRPC can handle packet loss, congestion, and background request execution.
+3. eRPC can run on commodity CPUs in traditional datacenter networks based on either lossy Ethernet or lossless fabrics. 
+4. scalability to 20000 connections (>> RDMA)
+
+
+==+== D. Weaknesses
+==-==    What are the paper’s weaknesses? Just a couple sentences,
+==-==    please.
+
+1. It doesn't have an overview figure for the whole system. They can add a figure to point out the component they created or modified.
+
+
+==+== E. Detailed comments
+
+Strengths:
+1. In microbenchmarks, one CPU core can handle up to 10 million small RPCs per second, or send large messages at 75 Gbps. The authors port a production-grade implementation of Raft state machine replication to eRPC without modifying the core Raft source code. They achieve 5.5 microseconds of replication latency on lossy Ethernet, which is faster than or comparable to specialized replication systems that use programmable switches, FPGAs, or RDMA.
+2. For low-overhead transport layer, their idea is optimize for the common case. For DMA buffer management, eRPC use server's response in common case. Flush DMA queue during rare loss. For congestion control, they optimize for uncongested network which is more common.
+
+
+
+
+==+== Scratchpad (for unsaved private notes)
+
+==+== End Review
