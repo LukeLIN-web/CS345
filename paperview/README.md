@@ -8,9 +8,9 @@ comment:
 
 建立一个自己的reading list,  是一个queue, 看到想读的就放进去,  然后有时间了就读.
 
+presentation,可以参考vl2 uiuc 的slide.
 
-
-#### arrakis
+### arrakis
 
 14年osdi, simon还是postdoc @uw, 开场说如果有工作请联系我, 现在已经是ap了.
 
@@ -33,7 +33,7 @@ libix，需要改程序。arrais是透明的。
 
 rdma1993年提出，2000有inifiteband，2010有roce，更好用更可靠更便宜。
 
-####  FaRM: Fast Remote Memory
+###  FaRM: Fast Remote Memory
 
 NSDI14, 亮点是 lay on top of transcation.
 
@@ -44,8 +44,6 @@ RDMA 需要固定的区域内存. 原因:
 
 已有的existing large page support 都不够. 所以他们  implemented PhyCo, a kernel driver that allocates 2GB memory. 所以就每个region只需要一个entry, 也提出了新hashing algorithm. 但是这些都不是最重要的. 这些只是实现目标的新方法. 
 
-
-
 #### 背景
 
 In cast,  queue很多消息, 可能延迟很高.
@@ -53,10 +51,6 @@ In cast,  queue很多消息, 可能延迟很高.
 priority flow control (PFC).  缺点是 head of line blocking, deadlocks.  
 
 RoCE 怎么避免 drop?  PAUSE frames
-
-
-
-
 
 别人的评论: 
 
@@ -68,10 +62,48 @@ Weaknesses
 
 \- FaRM does not support swapping data between memory and disk, which requires massive memory since all the local data has to reside in memory. - SSD might become bottlenecks for certain types of workload - Lacks discussion about RDMA atomic operations
 
+### eRPC
 
+作者是cmu phd和intel labs, 现在去 微软cto办公室搞5G, 所以大部分人毕业后都是干不一样的工作. best paper, 之前被sigcomm拒了. 
 
-#### erpc
+#### 挑战1
+
+managing packet loss, 之前的硬件要用PFC, infiniband来保证 lossless link layer. 
+
+switch 的buffer  有几十MB ,这些是on chip ram 因为有latency要求,      大小 >> BDP. 
+
+#### 挑战2  congest
+
+之前用NIC offload, 但是不够灵活. 他们就只优化uncongest network.  RTT-based 拥塞控制.
+
+他们引用一个84年的论文,  认为可以在high level 达到更好的性能.
+
+Assumption:  大部分的rpc 都可以放在一个small packet里, 他们优化的就是这个场景.  他们用数据证明这个场景是常见的. 从而可以提高end to end的性能. 
+
+#### 评估
+
+第七部分, 用raft, 还有masstree, 来评估实际应用下的性能表现.  
+
+他们后来又用DPDK implement了一些message passing组件. 
 
 别人的评论缺点: 
 
-\- Require users to modify their source code to adopt ownership-aware APIs. - Non-preempt scheduling and polling may waste CPU cycles and energy. - The throughput of large transfers is still lower than RDMA Write. - Cannot tolerate high loss rate
+- Require users to modify their source code to adopt ownership-aware APIs. 
+
+- Non-preempt scheduling and polling may waste CPU cycles and energy. 
+- The throughput of large transfers is still lower than RDMA Write. 
+- Cannot tolerate high loss rate.
+
+### StRoM
+
+浙大王泽可老师(二作)和eth 发的.
+
+在datacenter, 一般用DCTCP.提前减少sending rate before buffer fill up.
+
+
+
+
+
+### zeus
+
+发现能耗和性能优化之间有非线性tradeoff，然后提出了一个[optimizer](https://www.zhihu.com/search?q=optimizer&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra={"sourceType"%3A"article"%2C"sourceId"%3A"664765417"})来自动做这个tradeoff，它会在线profiling以调整batch size和GPU的功率限制。
