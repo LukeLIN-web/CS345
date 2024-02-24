@@ -5,6 +5,7 @@ comment:
 1.  不要说 bad, 说  your scheme would be stronger if it dealt with case X .
 2.  可以说某些assumption 不成立,  insufficient evalution  ,  instances where solution不能work,  一些部分难以理解
 3.  可以写出他调查了哪些数据, 提供了哪些数据. 
+4.  可以缩句, 就把他的话简化一下, 去掉废话.
 
 建立一个自己的reading list,  是一个queue, 看到想读的就放进去,  然后有时间了就读.
 
@@ -101,6 +102,26 @@ Assumption:  大部分的rpc 都可以放在一个small packet里, 他们优化�
 在datacenter, 一般用DCTCP.提前减少sending rate before buffer fill up.
 
 
+
+
+
+#### homa
+
+https://nan01ab.github.io/2018/09/Homa-Transport-Protocol.html  写的很好. 
+
+insight
+
+1. short message 优先级bypass先过, low latency.
+2. recevier动态分配优先级更好. 为什么? 
+3. receiver 同时请求多个sender.可以提高利用率. 
+
+为啥receiver能决定呢? 
+
+
+
+别人的缺点: 
+
+\- Evaluate on a relatively slow network. This solution might suffer from CPU performance when moving to a faster network as message scheduling is done by the CPU. - This solution may impose some restrictions on the network topology and packet loss rate.
 
 
 
