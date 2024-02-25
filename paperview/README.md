@@ -109,19 +109,47 @@ Assumption:  大部分的rpc 都可以放在一个small packet里, 他们优化�
 
 https://nan01ab.github.io/2018/09/Homa-Transport-Protocol.html  写的很好. 
 
+要思考, 为什么之前的解决方法行不通?  一开始都是复现, 发现有的复现不出来, 就有问题. 
+
+有14个匿名reviewer, 说明至少1-2次被拒绝了.因为一次大概7个reviewer.
+
+斯坦福的John ousterhout.  他女儿是ucsd教授 amy ousterhout
+
 insight
 
-1. short message 优先级bypass先过, low latency.
+1. short message 优先级bypass先过, low latency.  
 2. recevier动态分配优先级更好. 为什么? 
-3. receiver 同时请求多个sender.可以提高利用率. 
+3. receiver 同时请求多个sender.可以提高利用率.  这是necessary evil.
 
 为啥receiver能决定呢? 
 
 
 
+他们就用simulation,没有真正的网络跑. 
+
+Figure1 展示了 workload, 但是没说有多少request.
+
+Figure4 , 不是一个CDF图,  展示了threshold, 
+
+Figure8,非常好, 因为普通的CDF 显示不出来这个效果.  不过message 是request还是response还是加起来? 老师也不知道. 
+
+
+
+evaluation 的第一部分问题很好, guide你做实验. 
+
+5.2的simulation, 一个模拟器是ns-3. 用discrete event simulation.  Simpy 库. 
+
+
+
 别人的缺点: 
 
-\- Evaluate on a relatively slow network. This solution might suffer from CPU performance when moving to a faster network as message scheduling is done by the CPU. - This solution may impose some restrictions on the network topology and packet loss rate.
+\- Evaluate on a relatively slow network. 没有在100GB 网络上. This solution might suffer from CPU performance when moving to a faster network as message scheduling is done by the CPU. - This solution may impose some restrictions on the network topology and packet loss rate.
+
+他们的background和related work 有些重复冗余. 
+
+他们还用了page limit.所以可能写的字数少了.  The Homa implementation contains a total of 3660 lines of C++ code, of which about half are comments.
+
+他们还和ramcloud 比较了. 
 
 
 
