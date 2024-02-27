@@ -1,0 +1,57 @@
+==+== CS345 Paper Review Form
+==-== DO NOT CHANGE LINES THAT START WITH "==+==" UNLESS DIRECTED!
+==-== For further guidance, or to upload this file when you are done, go to:
+==-== https://hotcrp.kaust.edu.sa/cs345/offline
+
+==+== =====================================================================
+==+== Begin Review #36.
+==+== Reviewer: Juyi Lin <LINJ>
+
+==+== Paper #36
+==-== Title: ZeRO: Memory Optimizations Toward Training Trillion Parameter
+==-==        Models
+
+==+== Review Readiness
+==-== Enter "Ready" if the review is ready for others to see:
+
+Ready
+
+==+== A. Overall merit
+==-== Choices:
+==-==    1. Reject
+==-==    2. Weak reject
+==-==    3. Weak accept
+==-==    4. Accept
+==-==    5. Strong accept
+==-== Enter the number of your choice:
+
+(Your choice here)
+
+==+== B. Paper summary
+
+
+Turing-NLG, the largest language model at the time (17B parameters) with record breaking accuracy.
+
+==+== C. Strengths
+==-==    What are the paper’s strengths? Just a couple sentences, please.
+
+
+
+==+== D. Weaknesses
+==-==    What are the paper’s weaknesses? Just a couple sentences,
+==-==    please.
+
+
+
+==+== E. Detailed comments
+
+Methods
+1. For model states, such as adam states, this paper use partition to save model state in each GPU.
+2. For buffer, this paper create a fixed buffer, bucket multiple group of small data.
+3. 
+
+
+
+==+== Scratchpad (for unsaved private notes)
+
+==+== End Review

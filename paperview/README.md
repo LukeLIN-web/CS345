@@ -156,3 +156,10 @@ evaluation 的第一部分问题很好, guide你做实验.
 ### zeus
 
 发现能耗和性能优化之间有非线性tradeoff，然后提出了一个[optimizer](https://www.zhihu.com/search?q=optimizer&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra={"sourceType"%3A"article"%2C"sourceId"%3A"664765417"})来自动做这个tradeoff，它会在线profiling以调整batch size和GPU的功率限制。
+
+
+
+#### megatron
+
+Megatron-LM: Training Multi-Billion Parameter Language Models Using Model Parallelism  居然没有投稿吗，只有arxiv.
+
