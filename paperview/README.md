@@ -113,7 +113,7 @@ https://nan01ab.github.io/2018/09/Homa-Transport-Protocol.html  写的很好.
 
 有14个匿名reviewer, 说明至少1-2次被拒绝了.因为一次大概7个reviewer.
 
-斯坦福的John ousterhout.  他女儿是ucsd教授 amy ousterhout
+作者是斯坦福的John ousterhout.  他女儿是ucsd教授 amy ousterhout
 
 insight
 
@@ -153,11 +153,39 @@ evaluation 的第一部分问题很好, guide你做实验.
 
 
 
+
+
+#### Shenango
+
+背景: 网络硬件进步了, 但是os kernel还没跟上. 
+
+The simulator models an M/M/n/FCFS queuing system. 就是说一个泊松过程. n是server的数量.
+
+Shenango is implemented in C and includes bindings for C++ and Rust.
+
+work stealing:  在工作抢断调度程序中，计算机系统中的每个处理器都有一个要执行的工作项队列。可以steal别的core的task. 
+
+用DPDK来访问nic queue. 除此以外, 没有用DPDK.
+
+缺点: cache locality 会不会很差? 用2009年, 10Gb/s的NIC, 没有用最新的. 
+
+cache affinity, enables the binding and unbinding of a process or a thread,  the process or thread will execute only on the designated CPUs rather than any CPU.
+
+一作 Amy Ousterhout@ mit,  她爸爸John ousterhout是斯坦福的教授.   shinjuku是斯坦福的论文,所以amy可能听到了shinjuku的各种情况. 
+
+
+
+ 
+
 ### zeus
 
 发现能耗和性能优化之间有非线性tradeoff，然后提出了一个[optimizer](https://www.zhihu.com/search?q=optimizer&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra={"sourceType"%3A"article"%2C"sourceId"%3A"664765417"})来自动做这个tradeoff，它会在线profiling以调整batch size和GPU的功率限制。
 
+应该要引入讨论.
 
+
+
+ 
 
 #### megatron
 

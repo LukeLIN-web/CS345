@@ -29,8 +29,9 @@ Ready
 
 ==+== B. Paper summary
 
+Parallel training has memory redundancy problems. ZeRO can reduce memory consumption to train larger models. It split model states. This paper train Turing-NLG, the largest language model at the time (17B parameters) with record breaking accuracy.
 
-Turing-NLG, the largest language model at the time (17B parameters) with record breaking accuracy.
+
 
 ==+== C. Strengths
 ==-==    What are the paper’s strengths? Just a couple sentences, please.
@@ -46,9 +47,9 @@ Turing-NLG, the largest language model at the time (17B parameters) with record 
 ==+== E. Detailed comments
 
 Methods
-1. For model states, such as adam states, this paper use partition to save model state in each GPU.
+1. For model states, such as adam states, this paper use partition to save model state in each GPU. 
 2. For buffer, this paper create a fixed buffer, bucket multiple group of small data.
-3. 
+3. It also parition gradient on each GPUs.
 
 
 

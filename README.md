@@ -90,7 +90,15 @@ Faas:  webapps, IOT.
 
 
 
+### 怎么高效科研
 
+保护你的uptime, 高效时间.
+
+不meeting, 不talk, 关闭email, silence phone, leave shared office. 
+
+给自己列出todolist在uptime做, 不要在uptime无所事事. 
+
+总是记下你的idea, 有机会多记下细节, 以后需要的时候可以节省时间. 
 
 
 
