@@ -175,6 +175,46 @@ cache affinity, enables the binding and unbinding of a process or a thread,  the
 
 
 
+#### How to diagnose nanosecond network latencies in rich end-host stacks
+
+可以从2.2ms 到51us.
+
+high overlead 有两个问题, 1. 不能apply to the whole stack,  2. Disturb the latency distribution.
+
+what is 'swapper' process? if this process is running, the cpu is idling.
+
+What if  ptp asks the SW clock to go back in time?  Do old timestamps need to be pushed back?
+
+figure4, NIC delay真的是主要原因吗?  
+
+可以写一写自己的问题, 问问大家讨论. 应该把每个图讲清楚. 实验能佐证论点吗? 哪些 实验没做?
+
+weakness应该专注 问题本身的assumption不成立, 不focus  图画的不好,typo. 
+
+挑战:
+
+cpu profiling 和NIC ptp的 time domains不一样.
+
+keep track of meessage core.
+
+solution: if child explains 80% deviation, blame child.
+
+built on top of the intel-PT cpu profiler
+
+extended linux NIC timestamp framework.
+
+
+
+别人的看法:
+
+\- Could not find source code of tool despite authors mentioning plans for open sourcing it. - Systems with core hand-off boundaries require patching. - User-space VMA network stack evaluation felt like an afterthought (likely due to space constraints).
+
+the improvements in the experimental section seem very short-sighted: pinning applications to cores, limiting Memcached concurrency, etc. It seems that the solution is "overfitting" the experiment.
+
+In my opinion, (most of) the graphs were poorly designed. To make a non-exhaustive list: - Figure 1: line for Intel-PT cannot be seen, range on the axis is unnecessarily broad (graph shows values well above 10k while nothing seems to happen after 1k); - Figure 4: graph is not informative, as the bars in the plot are all flat because of the employed scale. also, it is not immediately clear that the graph is a box plot and the red dots are outliers (the authors don't state it); - caption of Figure 5: "the reader can ignore the Y-axis". why report a figure wherein the reader should ignore some of the content? - figure 8: in the text the authors discuss that for some time the message is processed by core X and then by core Y, but I fail to see where this is shown in the picture; - figure 9: the figure is supposed to compare times between M1 and M2, but only times for M2 are shown. - in several plots, reported values overlap with lines and other graph elements, which makes such values hard to read (e.g. figure 18, the value corresponding to `Driver (A)`).
+
+二作是老师的学生, 老师很失望, 觉得这些图做的太烂了.figure1的横线甚至不是直线,是有slit的. 
+
  
 
 ### zeus

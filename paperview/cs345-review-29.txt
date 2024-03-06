@@ -1,0 +1,73 @@
+==+== CS345 Paper Review Form
+==-== DO NOT CHANGE LINES THAT START WITH "==+==" UNLESS DIRECTED!
+==-== For further guidance, or to upload this file when you are done, go to:
+==-== https://hotcrp.kaust.edu.sa/cs345/offline
+
+==+== =====================================================================
+==+== Begin Review #29.
+==+== Reviewer: Juyi Lin <LINJ>
+
+==+== Paper #29
+==-== Title: How to diagnose nanosecond network latencies in rich end-host
+==-==        stacks
+
+==+== Review Readiness
+==-== Enter "Ready" if the review is ready for others to see:
+
+Ready
+
+==+== A. Overall merit
+==-== Choices:
+==-==    1. Reject
+==-==    2. Weak reject
+==-==    3. Weak accept
+==-==    4. Accept
+==-==    5. Strong accept
+==-== Enter the number of your choice:
+
+4
+
+==+== B. Paper summary
+
+End-host profilers have high overheads. This paper proposes Nsight, a latency diagnosis tool with full-stack coverage and low overhead that can identify sources of latency in end hosts. The experiment shows Nsight can systematically identify and remove performance overheads in memcached.
+
+
+==+== C. Strengths
+==-==    What are the paper’s strengths? Just a couple sentences, please.
+
+1. Nsight has pretty low overhead, better than eBPF.
+
+
+
+==+== D. Weaknesses
+==-==    What are the paper’s weaknesses? Just a couple sentences,
+==-==    please.
+
+1. Figure 3 is not compelete. Figure 4 has limited infomation. Seems we can conclude in one sentence. All deviation is smaller than 2 us except NIC delay.
+
+
+
+==+== E. Detailed comments
+
+Background
+
+1. Existing profiler leads large latency deviations, makes it hard to differentiate from true latency deviations.
+
+Methods
+1. The hardware CPU and NIC use different clocks. To align the timestamps in these sources correctly, NSight tracks the conversion between the two time domains during profiling. 
+2. CPU hardware profiling does not track the passage of network messages in multi-core systems across kernel cores and application cores. To track this path, NSight captures timestamps and core numbers at the boundary where kernel hands off the message to the application.
+
+Limitations
+
+1. NSight cannot be used for continuous profiling due to Intel-PT buffering implementation. NSight cannot capture latency deviations smaller than a batch
+2. NSight is that it produces 600MB-1GB of compressed raw profiling data per second. It is a very large overhead. Read the profiling results need 6GB-20GB spaces.
+
+
+
+
+
+
+
+==+== Scratchpad (for unsaved private notes)
+
+==+== End Review
