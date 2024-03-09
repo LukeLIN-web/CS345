@@ -1,0 +1,70 @@
+==+== CS345 Paper Review Form
+==-== DO NOT CHANGE LINES THAT START WITH "==+==" UNLESS DIRECTED!
+==-== For further guidance, or to upload this file when you are done, go to:
+==-== https://hotcrp.kaust.edu.sa/cs345/offline
+
+==+== =====================================================================
+==+== Begin Review #30.
+==+== Reviewer: Juyi Lin <LINJ>
+
+==+== Paper #30
+==-== Title: Offloading distributed applications onto smartNICs using iPipe
+
+==+== Review Readiness
+==-== Enter "Ready" if the review is ready for others to see:
+
+Ready
+
+==+== A. Overall merit
+==-== Choices:
+==-==    1. Reject
+==-==    2. Weak reject
+==-==    3. Weak accept
+==-==    4. Accept
+==-==    5. Strong accept
+==-== Enter the number of your choice:
+
+(Your choice here)
+
+==+== B. Paper summary
+
+Before this paper, it is unclear how to use a SmartNIC efficiently and maximize the offloading benefits, especially for distributed applications. This paper characterize four commodity SmartNICs and summarize the offloading performance implications from four perspectives: traffic control, computing capability, onboard memory, and host communication. This paper prototype iPipe, it can reduce the host load for real-world distributed applications. 
+
+
+
+==+== C. Strengths
+==-==    What are the paper’s strengths? Just a couple sentences, please.
+
+1. This paper well described the performance Characterization of multicore SoC smartNICs.
+2. iPipe proposes a distributed object abstraction that enables flexible actor migration and supports a software managed cache to mitigate the cost of SmartNIC to host communications.
+3. iPipe proposes a hybrid scheduler that: (1) combines FCFS and DRR(deficit round robin) discipline ; (2) migrates actors between SmartNIC and host processors when necessary.
+
+
+==+== D. Weaknesses
+==-==    What are the paper’s weaknesses? Just a couple sentences,
+==-==    please.
+
+1. 
+
+
+==+== E. Detailed comments
+
+Design implications 
+1. One should monitor the packet (request) sizes to adaptively offload application logic.
+2. For on-path SmartNICs, hardware support reduces synchronization overheads and makes multiple workers more efficient.
+3. One should take advantage of smartNIC by running applications with low IPC or high cache miss (MPKI) applications.
+
+Scheduling algorithm. The scheduler uses DRR for high variance lightweight tasks, FCFS for low variance lightweight tasks, and heavyweight tasks are migrated to the host. These decisions are performed dynamically to meet the desired average and tail response times.
+
+Distributed memory objects. This idea is similar with the page table.
+
+Security Isolation. 
+1. iPiPe can handle two attacks. handles the following two attacks: (1) actor state corruption, where a malicious actor manipulates other actors’ states; (2) denial-of-service, where an actor occupies a SmartNIC core and affects other actors. This paper introduces how to protect against these two attacks on the LiquidIOII SmartNICs, using a lightweight firmware.
+2. The author partition memory into regions and allocate each region to an actor, illegal address will be rejected. 
+3. They give each core a timer, if NIC receives the timeout notification, iPipe deregisters the actor.
+4. When there is an OS deployed on the SmartNIC (such as with BlueField), use hardware paging to keep isolation.
+
+
+==+== Scratchpad (for unsaved private notes)
+
+==+== End Review

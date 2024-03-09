@@ -193,7 +193,7 @@ weakness应该专注 问题本身的assumption不成立, 不focus  图画的不�
 
 挑战:
 
-cpu profiling 和NIC ptp的 time domains不一样.
+ cpu profiling 和NIC ptp的 time domains不一样.
 
 keep track of meessage core.
 
@@ -214,6 +214,16 @@ the improvements in the experimental section seem very short-sighted: pinning ap
 In my opinion, (most of) the graphs were poorly designed. To make a non-exhaustive list: - Figure 1: line for Intel-PT cannot be seen, range on the axis is unnecessarily broad (graph shows values well above 10k while nothing seems to happen after 1k); - Figure 4: graph is not informative, as the bars in the plot are all flat because of the employed scale. also, it is not immediately clear that the graph is a box plot and the red dots are outliers (the authors don't state it); - caption of Figure 5: "the reader can ignore the Y-axis". why report a figure wherein the reader should ignore some of the content? - figure 8: in the text the authors discuss that for some time the message is processed by core X and then by core Y, but I fail to see where this is shown in the picture; - figure 9: the figure is supposed to compare times between M1 and M2, but only times for M2 are shown. - in several plots, reported values overlap with lines and other graph elements, which makes such values hard to read (e.g. figure 18, the value corresponding to `Driver (A)`).
 
 二作是老师的学生, 老师很失望, 觉得这些图做的太烂了.figure1的横线甚至不是直线,是有slit的. 
+
+
+
+#### smartnic
+
+https://courses.engr.illinois.edu/ece598hpn/fa2020/slides/lect23-socNICs.pdf 有讲解
+
+\- 缺乏性能评估，不允许 iPipe 将工作负载卸载到 SmartNIC，这意味着主机的 CPU 会处理所有工作负载。 - 该解决方案似乎依赖于平台，因为它依赖于特定型号的 SmartNIC 提供的独特功能。
+
+
 
  
 
