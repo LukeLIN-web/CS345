@@ -223,19 +223,39 @@ https://courses.engr.illinois.edu/ece598hpn/fa2020/slides/lect23-socNICs.pdf 有
 
 \- 缺乏性能评估，不允许 iPipe 将工作负载卸载到 SmartNIC，这意味着主机的 CPU 会处理所有工作负载。 - 该解决方案似乎依赖于平台，因为它依赖于特定型号的 SmartNIC 提供的独特功能。
 
+第一个nic 是70年代生产的.
+
+scheduling 是centralized single queue还是 decentralized?
+
+smartnic上用 centralized single queue, host上用 decentralized ,multiple queue. 
+
+ 每个application写了1500-2300 LOC.
+
+Weakness: 
+
+1. 用core 的数量来说明 CPU usage大小, 但是没有测量 core 的utilization.
+
+2. evaluation, 没有对比 纯host运行效率. 
+
+actor模型 优缺点是啥? 
+
+优点: 清晰的编程模型. 
+
+缺点: application 写起来麻烦, 需要重新写. 
 
 
- 
 
 ### zeus
 
-发现能耗和性能优化之间有非线性tradeoff，然后提出了一个[optimizer](https://www.zhihu.com/search?q=optimizer&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra={"sourceType"%3A"article"%2C"sourceId"%3A"664765417"})来自动做这个tradeoff，它会在线profiling以调整batch size和GPU的功率限制。
+发现能耗和性能优化之间有非线性tradeoff，提出了一个[optimizer](https://www.zhihu.com/search?q=optimizer&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra={"sourceType"%3A"article"%2C"sourceId"%3A"664765417"})来自动做这个tradeoff，它会在线profiling以调整batch size和GPU的功率限制。
 
 应该要引入讨论.
 
+应该要分析每一张图. 
+
+读 companion paper 然后也对比一下. 
 
 
- 
 
 #### megatron
 

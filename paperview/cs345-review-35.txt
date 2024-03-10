@@ -1,15 +1,4 @@
-==+== CS345 Paper Review Form
-==-== DO NOT CHANGE LINES THAT START WITH "==+==" UNLESS DIRECTED!
-==-== For further guidance, or to upload this file when you are done, go to:
-==-== https://hotcrp.kaust.edu.sa/cs345/offline
 
-==+== =====================================================================
-==+== Begin Review #34.
-==+== Reviewer: Juyi Lin <LINJ>
-
-==+== Paper #34
-==-== Title: Efficient Sparse Collective Communication and its application
-==-==        to Accelerate Distributed Deep Learning
 
 ==+== Review Readiness
 ==-== Enter "Ready" if the review is ready for others to see:
@@ -25,7 +14,7 @@ Ready
 ==-==    5. Strong accept
 ==-== Enter the number of your choice:
 
-(Your choice here)
+5
 
 ==+== B. Paper summary
 
@@ -39,7 +28,7 @@ large models can be quite difficult to train due to memory constraints. This pap
 
 1. It can train an 8.3 billion parameter transformer language model to achieve SOTA results.
 2. It achieves 76% scaling efficiency with 512 GPUs.
-
+3. It proposes a dedicated parallelism way to reduce communication cost.
 
 
 
@@ -55,7 +44,7 @@ large models can be quite difficult to train due to memory constraints. This pap
 Strengths
 1. Before this paper, tensor parallel requires new frameworks or copmilers. This paper don't require any new compiler.
 2. This paper splits A along its columns can remove a synchronization point. Similarly, it splits K,Q,V in a column parallel fashion.
-3. NSDI'24, Bytedance use 10000 GPUs, MegaScale is built on top of Megatron-LM. proves its success in future.
+3. SC'21 also use megatron-LM to train 1 trillion parameters model at 502 petaFLOP/s on 3072 GPUs. NSDI'24, Bytedance use 10000 GPUs, MegaScale is built on top of Megatron-LM. proves its success in future. 
 
 Weaknesses
 1. The input and output (B, S, H) of each model block need to be repeatedly stored multiple times.
