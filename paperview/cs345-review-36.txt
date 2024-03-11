@@ -25,7 +25,7 @@ Ready
 ==-==    5. Strong accept
 ==-== Enter the number of your choice:
 
-(Your choice here)
+5
 
 ==+== B. Paper summary
 
@@ -36,6 +36,7 @@ Parallel training has memory redundancy problems. ZeRO can reduce memory consump
 ==+== C. Strengths
 ==-==    What are the paper’s strengths? Just a couple sentences, please.
 
+1. It is the basis of DeepSpeed 
 
 
 ==+== D. Weaknesses
