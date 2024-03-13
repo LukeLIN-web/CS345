@@ -243,6 +243,14 @@ actor模型 优缺点是啥?
 
 缺点: application 写起来麻烦, 需要重新写. 
 
+#### enso
+
+缺点: 
+
+ No mention of API or how well/easily one can integrate the userspace library with existing code. - Some real-world applications chosen for evaluation, despite being state-of-the-art, do not seem to be industry standard. - No comparison against state-of-the-art smart NICs; only simple offloads used in DPDK.
+
+\- Lack of comparison with RDMA-based methods. - The testbed used to evaluate Ensō might not support DCA/DDIO, which may partially mitigate the poor design of existing NICs.
+
 
 
 ### zeus
