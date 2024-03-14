@@ -51,9 +51,7 @@ In cast,  queue很多消息, 可能延迟很高.
 
 priority flow control (PFC).  缺点是 head of line blocking, deadlocks.  
 
-RoCE 怎么避免 drop?  PAUSE frames
-
-别人的评论: 
+RoCE 怎么避免 drop?  PAUSE frames 
 
 可能的缺点: \- 在引导时分配的 2 GB 页面可能会浪费大量内存。 - 基于轮询的实现来提高吞吐量可能会浪费资源，并且当其他 CPU 需要额外的周期时，会成为争用的根源。 - 作者只试验了 16 字节的密钥和 32 字节的值。 - 某些实验可以从增加集群中的计算机数量中受益。
 
@@ -87,7 +85,7 @@ Assumption:  大部分的rpc 都可以放在一个small packet里, 他们优化�
 
 他们后来又用DPDK implement了一些message passing组件. 
 
-别人的评论缺点: 
+缺点: 
 
 - Require users to modify their source code to adopt ownership-aware APIs. 
 
@@ -100,10 +98,6 @@ Assumption:  大部分的rpc 都可以放在一个small packet里, 他们优化�
 浙大王泽可老师(二作)和eth 发的.
 
 在datacenter, 一般用DCTCP.提前减少sending rate before buffer fill up.
-
-
-
-
 
 #### homa
 
@@ -123,8 +117,6 @@ insight
 
 为啥receiver能决定呢? 
 
-
-
 他们就用simulation,没有真正的网络跑. 
 
 Figure1 展示了 workload, 但是没说有多少request.
@@ -133,15 +125,11 @@ Figure4 , 不是一个CDF图,  展示了threshold,
 
 Figure8,非常好, 因为普通的CDF 显示不出来这个效果.  不过message 是request还是response还是加起来? 老师也不知道. 
 
-
-
 evaluation 的第一部分问题很好, guide你做实验. 
 
 5.2的simulation, 一个模拟器是ns-3. 用discrete event simulation.  Simpy 库. 
 
-
-
-别人的缺点: 
+缺点: 
 
 \- Evaluate on a relatively slow network. 没有在100GB 网络上. This solution might suffer from CPU performance when moving to a faster network as message scheduling is done by the CPU. - This solution may impose some restrictions on the network topology and packet loss rate.
 
@@ -150,10 +138,6 @@ evaluation 的第一部分问题很好, guide你做实验.
 他们还用了page limit.所以可能写的字数少了.  The Homa implementation contains a total of 3660 lines of C++ code, of which about half are comments.
 
 他们还和ramcloud 比较了. 
-
-
-
-
 
 #### Shenango
 
@@ -172,8 +156,6 @@ work stealing:  在工作抢断调度程序中，计算机系统中的每个处�
 cache affinity, enables the binding and unbinding of a process or a thread,  the process or thread will execute only on the designated CPUs rather than any CPU.
 
 一作 Amy Ousterhout@ mit,  她爸爸John ousterhout是斯坦福的教授.   shinjuku是斯坦福的论文,所以amy可能听到了shinjuku的各种情况. 
-
-
 
 #### How to diagnose nanosecond network latencies in rich end-host stacks
 
@@ -203,8 +185,6 @@ built on top of the intel-PT cpu profiler
 
 extended linux NIC timestamp framework.
 
-
-
 别人的看法:
 
 \- Could not find source code of tool despite authors mentioning plans for open sourcing it. - Systems with core hand-off boundaries require patching. - User-space VMA network stack evaluation felt like an afterthought (likely due to space constraints).
@@ -214,8 +194,6 @@ the improvements in the experimental section seem very short-sighted: pinning ap
 In my opinion, (most of) the graphs were poorly designed. To make a non-exhaustive list: - Figure 1: line for Intel-PT cannot be seen, range on the axis is unnecessarily broad (graph shows values well above 10k while nothing seems to happen after 1k); - Figure 4: graph is not informative, as the bars in the plot are all flat because of the employed scale. also, it is not immediately clear that the graph is a box plot and the red dots are outliers (the authors don't state it); - caption of Figure 5: "the reader can ignore the Y-axis". why report a figure wherein the reader should ignore some of the content? - figure 8: in the text the authors discuss that for some time the message is processed by core X and then by core Y, but I fail to see where this is shown in the picture; - figure 9: the figure is supposed to compare times between M1 and M2, but only times for M2 are shown. - in several plots, reported values overlap with lines and other graph elements, which makes such values hard to read (e.g. figure 18, the value corresponding to `Driver (A)`).
 
 二作是老师的学生, 老师很失望, 觉得这些图做的太烂了.figure1的横线甚至不是直线,是有slit的. 
-
-
 
 #### smartnic
 
@@ -245,11 +223,46 @@ actor模型 优缺点是啥?
 
 #### enso
 
-缺点: 
+Introduction 写的非常好. 
+
+传统的NIC缺点,  内存访问不佳, metadata overhead大.
+
+其实就是提出了一个ring buffer, 在figure3.
+
+挑战:
+
+1. NIC和application之间的coordination
+2. 多久notificate一次 
+
+ reactive notifications,让软件控制通知频率,   还提出了notification prefetching mechanism.
+
+为什么不用中断? 因为 PCIe 的RTT很小.
+
+userspace lib 用来request notification buffers and 创建Enso pipes
+
+思考题: kernel module有啥用? 
+
+用更小的PCIe bandwidth达到更高的goodput.
+
+E810 支持4.0 接口, 但是cpu实际上是用3.0的. 所以2个core以上, pcie就饱和了.
+
+Zhipeng Zhao  据说fpga硬件部分是他写的. 
+
+另一篇 , sosp'21  prism,提出rdma oneside 更快. redesign rdma interface with new primities.   提出软件implementation for future hardware. 但是 enso 用existing network stack.
+
+论文缺点: 
+
+他们的hardware不够具有代表性,  用了PCIe3.0 , 没有对比rdma.  
 
  No mention of API or how well/easily one can integrate the userspace library with existing code. - Some real-world applications chosen for evaluation, despite being state-of-the-art, do not seem to be industry standard. - No comparison against state-of-the-art smart NICs; only simple offloads used in DPDK.
 
 \- Lack of comparison with RDMA-based methods. - The testbed used to evaluate Ensō might not support DCA/DDIO, which may partially mitigate the poor design of existing NICs.
+
+
+
+
+
+
 
 
 
@@ -261,7 +274,7 @@ actor模型 优缺点是啥?
 
 应该要分析每一张图. 
 
-读 companion paper 然后也对比一下. 
+读 companion paper 然后也对比一下. 列一个表对比 
 
 
 
