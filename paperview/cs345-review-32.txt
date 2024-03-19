@@ -1,0 +1,68 @@
+==+== CS345 Paper Review Form
+==-== DO NOT CHANGE LINES THAT START WITH "==+==" UNLESS DIRECTED!
+==-== For further guidance, or to upload this file when you are done, go to:
+==-== https://hotcrp.kaust.edu.sa/cs345/offline
+
+==+== =====================================================================
+==+== Begin Review #32.
+==+== Reviewer: Juyi Lin <LINJ>
+
+==+== Paper #32
+==-== Title: Pollux: Co-adaptive Cluster Scheduling for Goodput-Optimized
+==-==        Deep Learning
+
+==+== Review Readiness
+==-== Enter "Ready" if the review is ready for others to see:
+
+Ready
+
+==+== A. Overall merit
+==-== Choices:
+==-==    1. Reject
+==-==    2. Weak reject
+==-==    3. Weak accept
+==-==    4. Accept
+==-==    5. Strong accept
+==-== Enter the number of your choice:
+
+4
+
+==+== B. Paper summary
+
+Existing schedulers of deep learning clusters don't re-optimize training to utilize resources better. Pollux monitors the status of each job and models how their goodput change with resource variation. Pollux dynamically assigns resources. Pollux reduces average job completion times by 37–50%.
+
+==+== C. Strengths
+==-==    What are the paper’s strengths? Just a couple sentences, please.
+
+1. Pollux reduces the average job completion time by 37%–50%. At the same time, Pollux improves finish-time fairness by 1.5×–5.4×. 
+2. It is the first scheduler that considers the statistical efficiency of DL training and the inter-dependence of resource decisions and training parameters.
+
+==+== D. Weaknesses
+==-==    What are the paper’s weaknesses? Just a couple sentences,
+==-==    please.
+
+1. Adjusting the batch size and learning rate may decrease the training accuracy. But the paper doesn't show accuracy results.
+
+
+==+== E. Detailed comments
+
+Strengths
+1. PolluxAgent tunes jobs batch size and learning rate. PolluxSched periodically optimizes the resource allocations for all jobs in the cluster. It is inspiring when you need to adapt DL job execution at two distinct granularities.
+2. The experiment has comprehensive configurations.
+3. It uses a Re-allocation penalty to avoid too many re-allocation.
+4. Pollux promotes fairness in Figure 7.
+5. It is open-source. The repo describes file structure to help reproduction.
+
+Weakness
+1. Fig. 1b. How do they define the best batch size?
+2. Equation 5, what does the "tr" mean?
+3. Figure 2 has too many figures; it is difficult to find important information. The top row of Figure 2 could be removed, it only shows the validation results.
+4. Why does Figure 6 right has some missing lines?
+
+
+When multiple distributed DL jobs share a single node, their network usage while synchronizing gradients and model parameters may interfere with each other. I wonder whether we could use smartNIC or RDMA to avoid interference in PolluxSched $4.2 
+
+
+==+== Scratchpad (for unsaved private notes)
+
+==+== End Review
