@@ -52,8 +52,6 @@ Strengths
 2. Enso message buffer is opaque, so it is more general for upper layer application.
 
 
-
-
 It has well written artifact. It has detailed setup introduction, installation and test cases. Therefore, it also obtained distinguished artiface award. The authors implement smartNIC in FPGA, so other researchers don't need specfic hardware to reproduce the results. (Mainwhile it requires FPGA knowledge)
 
 

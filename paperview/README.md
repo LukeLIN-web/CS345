@@ -9,7 +9,9 @@ comment:
 
 建立一个自己的reading list,  是一个queue, 看到想读的就放进去,  然后有时间了就读.
 
-presentation,可以参考vl2 uiuc 的slide.
+presentation,可以参考vl2 uiuc 的slide. 应该要引入讨论.  应该要分析每一张图. 
+
+读 companion paper 然后也对比一下. 列一个表对比 
 
 ### arrakis
 
@@ -62,6 +64,8 @@ Weaknesses
 \- FaRM does not support swapping data between memory and disk, which requires massive memory since all the local data has to reside in memory. - SSD might become bottlenecks for certain types of workload - Lacks discussion about RDMA atomic operations
 
 ### eRPC
+
+Datacenter RPCs can be General and Fast
 
 作者是cmu phd和intel labs, 现在去 微软cto办公室搞5G, 所以大部分人毕业后都是干不一样的工作. best paper, 之前被sigcomm拒了. 
 
@@ -159,8 +163,6 @@ cache affinity, enables the binding and unbinding of a process or a thread,  the
 
 #### How to diagnose nanosecond network latencies in rich end-host stacks
 
-可以从2.2ms 到51us.
-
 high overlead 有两个问题, 1. 不能apply to the whole stack,  2. Disturb the latency distribution.
 
 what is 'swapper' process? if this process is running, the cpu is idling.
@@ -195,7 +197,7 @@ In my opinion, (most of) the graphs were poorly designed. To make a non-exhausti
 
 二作是老师的学生, 老师很失望, 觉得这些图做的太烂了.figure1的横线甚至不是直线,是有slit的. 
 
-#### smartnic
+#### smartnic ipipe
 
 https://courses.engr.illinois.edu/ece598hpn/fa2020/slides/lect23-socNICs.pdf 有讲解
 
@@ -258,8 +260,6 @@ Zhipeng Zhao  据说fpga硬件部分是他写的.
 
 \- Lack of comparison with RDMA-based methods. - The testbed used to evaluate Ensō might not support DCA/DDIO, which may partially mitigate the poor design of existing NICs.
 
-
-
 ### pollux
 
 osdi'21的best paper
@@ -278,33 +278,56 @@ T4其实是用来inference的, 很廉价, 没有nvlink, 没有infinite band or r
 
 实验里, optimus implementation没有用之前论文的, 而是用pollux的吞吐量model.
 
-
-
 #### MLaaS in wild
 
 提出如果gpu  heterogenous. 该怎么办.
 
 ### zeus
 
-发现能耗和性能优化之间有非线性tradeoff，提出了一个[optimizer](https://www.zhihu.com/search?q=optimizer&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra={"sourceType"%3A"article"%2C"sourceId"%3A"664765417"})来自动做这个tradeoff，它会在线profiling以调整batch size和GPU的功率限制。
+发现能耗和性能优化之间有非线性tradeoff，在线profiling以调整batch size和GPU的功率限制。
 
-应该要引入讨论.
+这篇文章发nsdi真的很奇怪, 感觉都不是一个community的.
 
-应该要分析每一张图. 
+小的batch size可能最终acc不同,他只测了达到target acc的时间, 如果target acc很低那问题很大. 
 
-读 companion paper 然后也对比一下. 列一个表对比 
+画图技巧， 线也可以变色， 画出探索的先后顺序。
 
-| zeus | envpipe |      |
-| ---- | ------- | ---- |
-|      |         |      |
-|      |         |      |
-|      |         |      |
+缺点： 
+
+baseline 太烂了，所以怎么弄都有时间和能量优化。 超频也是问题。 只说了power没说频率。
+
+ 没有考虑别的超参数如lr ，不同的batch size需要不同的lr来收敛到acc。 
+
+不需要 每次都retrain from scratch， 他们没考虑fine tuning的情况。 
+
+CPU也花了很多energy， 他没考虑到。
 
 
 
+|            | zeus                                                         | envpipe                                                      |
+| ---------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| insight    | grid search takes too much time. We need a better search solution. | Pipeline parallel is widely used, and it has a lot of bubbles. |
+| method     | Multi-armed Bandit, early stopping                           | schedule pipeline parallel, decrease SM frequency when computation has bubbles. |
+| results    | reduces energy consumption (ETA) by up to 15.3%–75.8%        | 1% throughput <-> 28.5% energy                               |
+| Advantages | we can learn how to optimize metrics(speed/energy) across retraining jobs. | more suitable for GPU cluster, production environment        |
 
+#### envpipe
 
+之前的工作会牺牲训练吞吐，所以本文想在节能的同时不能降低太多训练的效率。
 
+在来看现有的流水线训练模式，有很多气泡。 拿出来其中的一个块来看，性能变差并不会影响整体,  充分利用这个结构figure2, 可以节约能耗，并且不会降低整体训练效率。但是对于有依赖的结构（unusable气泡）来说，降低SM的频率以减少能耗的同时，意味着影响整体训练效率。
+
+因此本文的目标就是尽量的增加usable气泡的个数，并利用usable气泡来节能。
+
+分为三个模块，Profiler用于获取模型执行的基本信息；Scheduler用于调整流水线并行的执行过程, Planner用于调整SM的频率
+
+scheduler 牺牲显存, 尽量将1F1B的前传F提前放, 增加Usable气泡的个数. 这个工作提出要根据显存情况去自适应调整。
+
+planner  降低非关键路径的频率,  部分关键路径从最外侧转移到了内侧；Iteration：逐渐调整每个阶段的SM频率，直到流水线训练的关键路径又回到最外侧；为什么? 
+
+最终实验效果在仅损耗1%吞吐量的同时，节约28.4%的能耗；
+
+implement 上,  on top of DeepSpeed, 用的是lock_gpu_clock 来锁. 
 
 #### megatron
 
