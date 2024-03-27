@@ -84,6 +84,8 @@ Faas:  webapps, IOT.
 
 总是记下你的idea, 有机会多记下细节, 以后需要的时候可以节省时间. 因为你以后会学会更多方法. 
 
+
+
 ### 怎么画图
 
 首先要知道你需要用图支持什么论点.
@@ -102,6 +104,10 @@ decouple画图和数据处理, 画图的时候不要做任何费时的事情.  r
 
 CDF图怎么画:  •https://colab.research.google.com/drive/1OEG16-J2snSk5RQFe07HJ4nE4kKhaZM3?usp=sharing
 
+ 画图, 可以在baseline 画一条虚线. 
 
+#### 科研
 
- 
+你在哪里有啥资源, 就应该利用好你独特的资源来发论文来工作.
+
+不应该相信任何作者任何big name的conclusion, 总是要质疑. 
