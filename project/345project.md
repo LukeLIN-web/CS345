@@ -38,7 +38,7 @@
 
 
 
-#### 英语论文写作tip
+## 英语论文写作tip
 
 1. 不要缩写, it is, does not 都不要缩写. 
 2. 不要用using, 
@@ -47,4 +47,36 @@
 5. 摘要不用缩写NN ,DL. 正文才要. 
 
 
+
+
+
+## 画图经验
+
+overleaf不太支持svg, 不要用png位图, 所以我 用pdf.
+
+很多图的caption放latex就太小, 所以要大字号
+
+应该可以把多个图拼起来的.  可以引用Fig. 9b. LaTeX 如何让两张图并排显示？ - PPluvcoder的回答 - 知乎  https://www.zhihu.com/question/41322252/answer/315983527
+
+```
+\begin{figure}
+    \centering
+    \subfigure[]{%
+        \includegraphics[width=0.25\textwidth]{figures/speedup.pdf}
+        \label{fig:train_whole_model}
+    }\hfil
+    \subfigure[]{%
+        \includegraphics[width=0.25\textwidth]{figures/speedup.pdf}
+        \label{fig:train_sl}
+    }\hfil
+    \caption{\subref{fig:train_whole_model}~...}
+    \label{fig:pt_sl_comparison}
+\end{figure}
+```
+
+
+
+应该用autoref吗?  我看了一些文章都是ref然后手动打 Fig.  envpipe甚至混合用.  目前理解是需要省空间的时候手动打Fig. 和 Eqn. 不需要的时候就autoref也可以. 
+
+bar可以用stack , 来画出多个因素. 
 

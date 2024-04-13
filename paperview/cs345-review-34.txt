@@ -1,0 +1,67 @@
+==+== CS345 Paper Review Form
+==-== DO NOT CHANGE LINES THAT START WITH "==+==" UNLESS DIRECTED!
+==-== For further guidance, or to upload this file when you are done, go to:
+==-== https://hotcrp.kaust.edu.sa/cs345/offline
+
+==+== =====================================================================
+==+== Begin Review #34.
+==+== Reviewer: Juyi Lin <LINJ>
+
+==+== Paper #34
+==-== Title: Efficient Sparse Collective Communication and its application
+==-==        to Accelerate Distributed Deep Learning
+
+==+== Review Readiness
+==-== Enter "Ready" if the review is ready for others to see:
+
+Ready
+
+==+== A. Overall merit
+==-== Choices:
+==-==    1. Reject
+==-==    2. Weak reject
+==-==    3. Weak accept
+==-==    4. Accept
+==-==    5. Strong accept
+==-== Enter the number of your choice:
+
+5
+
+==+== B. Paper summary
+
+
+
+Efficient collective communication is crucial to parallel-computing applications, but existing methods only focus on dense inputs, resulting in transmissions of many zeros when inputs are sparse. This paper proposes OmniReduce, an efficient streaming aggregation system that exploits sparsity to maximize effective bandwidth use by sending only non-zero data blocks. This idea accelerates distributed training by up to 8.2×. Even at 100 Gbps, OmniReduce delivers 1.4–2.9× better performance for network-bottlenecked DNNs.
+
+==+== C. Strengths
+==-==    What are the paper’s strengths? Just a couple sentences, please.
+
+1. It can use the CPU to help accelerate DNN training. CPU received relatively less attention in DNN training. 
+2. The idea is pretty straightforward to understand, so more researchers could learn and follow it. And it could reach better performance.  
+3. It thoroughly compares different block-based compression methods' performances.
+
+
+
+==+== D. Weaknesses
+==-==    What are the paper’s weaknesses? Just a couple sentences,
+==-==    please.
+
+
+
+1. In 100 Gbps, OmniReduce can only outperform the baseline in 3 types of DNNs. The usage case is limited. 
+2. Figure 13 can add a caption, "O represent OmniReduce"
+
+
+
+
+==+== E. Detailed comments
+
+Popular distributed training libraries like NCCL and Gloo don't have native support for sparse data. Therefore, This paper proposes an innovative way to transmit sparse data. It supports both DPDK and RDMA.
+
+In the transformer model, such as the BERT model, and Computer Vision tasks, such as VGG19/ResNet152, the OmniReduce doesn't show benefits in a 100Gbps network. In future work, we can explore which kinds of models have high sparsity and summarize the characteristics of these models. 
+
+
+
+==+== Scratchpad (for unsaved private notes)
+
+==+== End Review
