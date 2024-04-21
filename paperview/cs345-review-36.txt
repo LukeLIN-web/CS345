@@ -29,14 +29,17 @@ Ready
 
 ==+== B. Paper summary
 
-Parallel training has memory redundancy problems. ZeRO can reduce memory consumption to train larger models. It split model states. This paper train Turing-NLG, the largest language model at the time (17B parameters) with record breaking accuracy.
+Large models has billions to trillions of parameters, existing solutions cannot fit them into limited GPU memory. ZeRO can reduce memory consumption to train larger models. ZeRO eliminates memory redundancies in data- and model-parallel training while retaining low communication volume and high computational granularity, allowing us to scale the model size proportional to the number of devices with sustained high efficiency.
 
 
 
 ==+== C. Strengths
 ==-==    What are the paper’s strengths? Just a couple sentences, please.
 
-1. It is the basis of DeepSpeed 
+1. ZeRO has good performance and can scale to large model size. 
+2. ZeRO has good usability. ZeRO can train large models of up to 13B parameters without requiring model parallelism which is harder for scientists to apply.
+3. ZeRO can train the largest language model at the time with SOTA accuracy.
+
 
 
 ==+== D. Weaknesses
@@ -47,11 +50,20 @@ Parallel training has memory redundancy problems. ZeRO can reduce memory consump
 
 ==+== E. Detailed comments
 
-Methods
-1. For model states, such as adam states, this paper use partition to save model state in each GPU. 
-2. For buffer, this paper create a fixed buffer, bucket multiple group of small data.
-3. It also parition gradient on each GPUs.
 
+
+Methods
+1. ZeRO-DP parition Optimizer State, gradient and parameter to save memory consumption in each GPU. 
+2. The authors develop ZeRO-R to optimize the residual memory consumed by these three factors respectively. ZeRO-R removes activation replication in MP through activation partitioning. It also offloads activations to CPU when appropriate.
+3. ZeRO-R create a fixed buffer to bucket multiple group of small data. 
+4. ZeRO-R proactively manages memory based on the different lifetime of tensors, preventing memory fragmentation.
+5. ZeRO-R preallocate memory for activation checkpoint and gradient to prevent memory fragmentation.
+
+
+Strengths
+1. This paper implement and evaluate ZeRO-100B — Pos+g of ZeRO-DP plus ZeRO-R —, that represents an 8x increase in model size and 10x increase in achievable performance over state-of-the-art.
+2. This paper train Turing-NLG, the largest language model at the time (17B parameters) with record breaking accuracy.
+3. This paper have released all implementations described in this paper.
 
 
 ==+== Scratchpad (for unsaved private notes)

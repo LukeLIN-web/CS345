@@ -44,7 +44,7 @@ large models can be quite difficult to train due to memory constraints. This pap
 Strengths
 1. Before this paper, tensor parallel requires new frameworks or copmilers. This paper don't require any new compiler.
 2. This paper splits A along its columns can remove a synchronization point. Similarly, it splits K,Q,V in a column parallel fashion.
-3. SC'21 also use megatron-LM to train 1 trillion parameters model at 502 petaFLOP/s on 3072 GPUs. NSDI'24, Bytedance use 10000 GPUs, MegaScale is built on top of Megatron-LM. proves its success in future. 
+3. In SC'21, Nividia uses megatron-LM to train 1 trillion parameters model at 502 petaFLOP/s on 3072 GPUs. In NSDI'24, Bytedance use 10000 GPUs, MegaScale is built on top of Megatron-LM. proves its success in future. 
 
 Weaknesses
 1. The input and output (B, S, H) of each model block need to be repeatedly stored multiple times.

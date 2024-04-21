@@ -1,11 +1,10 @@
-# CS345
-
-comment: 
+对论文comment: 
 
 1.  不要说 bad, 说  your scheme would be stronger if it dealt with case X .
 2.  可以说某些assumption 不成立,  insufficient evalution  ,  instances where solution不能work,  一些部分难以理解
 3.  可以写出他调查了哪些数据, 提供了哪些数据. 
 4.  可以缩句, 就把他的话简化一下, 去掉废话.
+5.  一般找weakness就挑实验最好找, 比如哪些消融实验没做, 哪些变量的影响没有测. 
 
 建立一个自己的reading list,  是一个queue, 看到想读的就放进去,  然后有时间了就读.
 
@@ -331,13 +330,65 @@ implement 上,  on top of DeepSpeed, 用的是lock_gpu_clock 来锁.
 
 ### omnireduce
 
-我在论文中最缺少的是关于数据稀疏性的更深入的讨论。更详细：
+一般认为自己最懂会给最低分, 这个论文也是一个人给了2分 exp说是4.
+
+他们认为解决了一个重要和timely topic. crowed area. well motivated. 目前的问题都是shepherd,就是可以在camera ready解决的.
+
+可以用 `latexdiff`  来对比两篇tex文件. 
+
+缺点
+
+\- 需要额外的计算服务器作为聚合器。 - \- Does not figure out an efficient method to retrieve the bitmap for tensors on CPU memory. GPU scan bitmap快. 
+
+最缺少的是关于数据稀疏性的更深入的讨论。更详细：
+
+可以create sparsity, 在图11, 可以remove 一些梯度. 
+
+字和图的修改不应该放在weakness, 就放在detailed comment就行. 
+
+没有说明为什么稀疏性存在. 
 
 - 稀疏性的好处似乎只有在具有大型嵌入表（CTR 和 LM.在 CV 中，omnireduce 的好处仅来自流聚合组件，因为传输的数据不会减少 - 见表 1）。我们能否得出结论，OmniReduce的数据稀疏性组件仅对嵌入表有用？如果是这样，我们是否可以将 Omnireduce 用于嵌入和其他在其他情况下没有通信开销的原语（在 Omnireduce 中，客户端需要传输“下一个”块索引，这会引入一些开销）？ 
 - 考虑到上述因素，我们为什么要选择块大小？也就是说，如果给定嵌入的梯度为零或非零，为什么不始终使块大小等于嵌入维度呢？ 
-- 令我惊讶的是，CV网络，尤其是VGG，没有从稀疏性中获益，因为它们同时使用ReLU和dropout。我认为通过观察稀疏性如何构建的模式，这可能会在某种程度上得到改善，因为稀疏性可能不存在于连续的内存位置。让我举一个具体的例子来说明我的意思。采用具有 5 个输入特征和 4 个输出特征的线性图层。权重矩阵具有形状 （4,5）。进一步假设输入 x 是密集的，但 dropout 将第一个和第三个元素掩码为零，即 x=[0，a，0，b，c]。这将导致权重矩阵的第一列和第三列的梯度为 0，但 OmniReduce 不会检测到这一点，因为权重矩阵是以行方式存储的！这是作者考虑过的事情吗？（我知道由于数据局部性的原因，检测列中的稀疏性可能无效，并且只有当批处理中的所有输入都为零时，梯度列才为零，但是，在论文中对此进行一些讨论将是有益的）
+- 令我惊讶的是，CV网络，尤其是VGG，没有从稀疏性中获益，因为它们同时使用ReLU和dropout。我认为通过观察稀疏性如何构建的模式，这可能会在某种程度上得到改善，因为稀疏性可能不存在于连续的内存位置。 OmniReduce 不会检测到这一点，因为权重矩阵是以行方式存储的！这是作者考虑过的事情吗？（我知道由于数据局部性的原因，检测列中的稀疏性可能无效，并且只有当批处理中的所有输入都为零时，梯度列才为零，但是，在论文中对此进行一些讨论将是有益的）
 
-#### megatron
+### megatron
 
 Megatron-LM: Training Multi-Billion Parameter Language Models Using Model Parallelism  居然没有投稿吗，只有arxiv.
+
+Pipeline 并行, 不同layer在不同GPU. 缺点是有bubble.
+
+megatron tensor 并行, 同一个layer切分到多个GPU. 缺点是通讯成本比这个高. 
+
+X是上一层的embedding,  X的一行代表什么? 就是每个element的嵌入.
+
+因为transformer总是有连续两层FC, 所以他们直接两层一起设计了.  第一层A按列切, 减少同步, 第二层B按行切, 也是减少同步. 
+
+attention, 要看到所有X, 所以要把X按行切, KQV 按列切. . 
+
+通讯量  怎么算的? 
+
+跨servers,可以用 pipeline并行.
+
+这里是人工调整, 不能迁移到别的模型CNN, Alpa 可以自动调优 tensor 并行. 
+
+MLP之后, 是否在一个GPU上处理? 然后之后的self attention需要再次split到多个GPU吗? 
+
+### ZERO
+
+梯度和optimizer states 占用的空间很大.   占用空间的还有activation, temporary buffer和fragment memory.
+
+forward:  GPU0 broadcast 他有的参数,  伪代码好像说每个GPU拥有一层layer ? 所以他是按 MLP layer 到每个GPU的是吗? 会不会把一个layer切分到两个GPU?  这个layer是一个全连接层吗? 可能是linear layer也可能是transformer layer. 
+
+他们只考虑了吞吐量 per GPU, 有考虑收敛的时间吗? 
+
+微软deepspeed组其实没啥花心思写论文, 他们只在乎代码有用就行. 
+
+我们可以把这个技术用在 one million GPU的集群上吗?会有什么问题? 
+
+拓展: 
+
+1. ZeRO++: Extremely Efficient Collective Communication for Giant Model Training, 发在ICLR, 多级 参数partition.  梯度/参数 压缩.
+
+2. MiCS: near-linear scaling for training gigantic model on public cloud. from AWS.  22年11月pVLDB, 当时李沐已经离职去startup了.  divide all devices into partition groups. each group holds a complete copy of the model states. 
 
