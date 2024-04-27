@@ -1,0 +1,71 @@
+==+== CS345 Paper Review Form
+==-== DO NOT CHANGE LINES THAT START WITH "==+==" UNLESS DIRECTED!
+==-== For further guidance, or to upload this file when you are done, go to:
+==-== https://hotcrp.kaust.edu.sa/cs345/offline
+
+==+== =====================================================================
+==+== Begin Review #37.
+==+== Reviewer: Juyi Lin <LINJ>
+
+==+== Paper #37
+==-== Title: Alpa: Automating Inter- and Intra-Operator Parallelism for
+==-==        Distributed Deep Learning
+
+==+== Review Readiness
+==-== Enter "Ready" if the review is ready for others to see:
+
+Ready
+
+==+== A. Overall merit
+==-== Choices:
+==-==    1. Reject
+==-==    2. Weak reject
+==-==    3. Weak accept
+==-==    4. Accept
+==-==    5. Strong accept
+==-== Enter the number of your choice:
+
+4
+
+==+== B. Paper summary
+
+
+Existing model-parallel training systems either require users to manually create a parallelization plan or automatically generate one from a limited space of model parallelism configurations. Alpa implements an efficient runtime to generate two-level parallelism. Alpa generates parallelization plans that outperform hand-tuned model-parallel systems. Alpa also generalizes to models with heterogeneous architectures and models without manually designed plans. Alpa first determines how to partition the model into stages and which cards each stage can be allocated to through dynamic programming. Then, within each stage, it further decides how each operation is partitioned across multiple cards using integer linear programming. 
+
+
+==+== C. Strengths
+==-==    What are the paper’s strengths? Just a couple sentences, please.
+
+1. The existing systems often focus on only inter-operation, intra-operation, or automatic parallel strategy search, while Alpa considers all of them.
+2. Alpa generates parallelization plans that outperform hand-tuned model-parallel systems. Alpa also generalizes to models without manual strategies.
+
+==+== D. Weaknesses
+==-==    What are the paper’s weaknesses? Just a couple sentences,
+==-==    please.
+
+1. Alpa is not compatible with the most popular Pytorch framework.
+2. Evaluation models are limited.
+3. A Two-level hierarchy solution may not be the best parallel solution.
+
+
+
+==+== E. Detailed comments
+
+Strengths
+1. Alpa can easily generate parallelization plans for models without manual strategies. Alpa has redefined parallelism into intra-operation parallelism and inter-operation parallelism. Alpa is an automated optimization process instead of the hand-tuned process.
+2. Alpa has better performance on some models. On GShard MoE models, Alpa achieves up to 9.7× speedup than Deepspeed. Alpa also generalizes to models without manual strategies and achieves an 80% linear scaling efficiency on Wide-ResNet.
+3. It is open-source.
+
+
+Weaknesses
+1. More effort is required to transfer the current PyTorch model to the JAX framework. Developers need to learn JAX API because JAX has much fewer model implementations in the ecosystem.
+2. Alpa only outperforms two models in Evaluation: Wide-ResNet and MoE. It is Not quite sufficient to prove that Alpa has better performance than most ML models. 
+3. Searching for the optimal solution at each level of the 2-level hierarchy doesn't necessarily result in finding the global optimal solution.
+4. The offload method proposed by the ZerO paper is not considered. 
+
+
+
+
+==+== Scratchpad (for unsaved private notes)
+
+==+== End Review

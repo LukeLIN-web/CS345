@@ -392,3 +392,49 @@ forward:  GPU0 broadcast 他有的参数,  伪代码好像说每个GPU拥有一�
 
 2. MiCS: near-linear scaling for training gigantic model on public cloud. from AWS.  22年11月pVLDB, 当时李沐已经离职去startup了.  divide all devices into partition groups. each group holds a complete copy of the model states. 
 
+
+
+### Alpa
+
+tensorflow太难用了, 所以谷歌又提出了jax来和torch竞争. 
+
+从jax 编译到 HLO IR  with sharding spec, 然后优化HLO IR,  新代码没有sharding spec, 而是产生 通讯原语. 
+
+之前谷歌已经有了op并行的 Gshard和GSPMD. 
+
+intra-op:  tensor并行 和op并行,  缺点是通讯量高, 优点是device utilization 高
+
+inter-op :  model 并行和pipeline , 优点是通讯量少, 缺点是device utilization 低.  alpa说的inter-op 其实就是pipeline 并行.
+
+spec, table1,  If Xi = S, it means the i-th axis of the tensor is partitioned. Otherwise, the i-th axis is replicated
+
+一个worker可能有多个GPU. 一个mesh 有多个workers.
+
+intra-op的挑战:  1.  一个op的sharding spec会影响其他op的sharding spec. 2. 找到proper specs 搜索空间太大. 
+
+如果previous op mismatch,就需要reshard.
+
+inter-op pass:  graph分成多个pipeline stages, devices 分成多个 device meshes. 然后associate to stages.  最小化pipeline执行时间.   建模为动态规划问题. 
+
+intra-op pass: 最小化stage执行时间.  建模为 integer linear Programming问题. 
+
+limitation:
+
+1. 没有避免 cross-mesh resharding.  - >  利用intra node 通讯
+2. 编译很久 -> early pruning,  op clusttering, 限制device mesh 形状.  
+3. This method does not model and fully leverage overlapping the computation and communication. 首先，省略计算成本的原因可能值得怀疑。此模型仅考虑通信成本。但是，对于某些操作来说，计算是很耗时的。其次，成本模型不考虑重叠的计算和通信。在这种情况下，可以屏蔽计算或通信成本。因此，此成本模型可能无法生成最佳分区计划。 
+
+
+
+另一篇paper ,[Aceso: Efficient Parallel DNN Training through Iterative Bottleneck Alleviation](https://dl.acm.org/doi/10.1145/3627703.3629554)  eurosys'24, 搜索快得多, 5%的搜索cost, 吞吐量反而更高了. 但是需要allocate resource来profiling.  alpa不profiling.
+
+
+
+#### 缺点
+
+1. 他没有在 异构cluster上做实验. 没考虑异构设备.
+2. 编译时间长。也许很难支持具有大量层的模型。 figure10要是可以把每个步骤时间标出来就更好了. 
+
+论文的代码一般不维护, 但是idea会被工业界吸收参考. apache spark,产生了databrick. 战胜了flink. 对于学术界来说 , novelty比代码质量重要. 
+
+mxnet 团队 他们就想创建 mxnet 原型, 然后移交给apache,他们就搞下一个项目.

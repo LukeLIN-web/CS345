@@ -76,7 +76,7 @@ overleaf不太支持svg, 不要用png位图, 所以我 用pdf.
 
 
 
-应该用autoref吗?  我看了一些文章都是ref然后手动打 Fig.  envpipe甚至混合用.  目前理解是需要省空间的时候手动打Fig. 和 Eqn. 不需要的时候就autoref也可以. 
+应该用autoref吗?  我看了一些文章都是ref然后手动打 Fig.  envpipe甚至混合用.  目前理解是特别需要省文字的时候手动打Fig. 和 Eqn. 不需要的时候就autoref 就可以.  
 
 bar可以用stack , 来画出多个因素. 
 
