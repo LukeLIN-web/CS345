@@ -438,3 +438,40 @@ limitation:
 论文的代码一般不维护, 但是idea会被工业界吸收参考. apache spark,产生了databrick. 战胜了flink. 对于学术界来说 , novelty比代码质量重要. 
 
 mxnet 团队 他们就想创建 mxnet 原型, 然后移交给apache,他们就搞下一个项目.
+
+
+
+### ark
+
+ARK: GPU-driven Code Execution for Distributed Deep Learning  NSDI'23 
+
+代码应该在微软内部才有.
+
+他们认为 NCCL  MMIO 在反向传播的时候会降低吞吐量. 为什么? 
+
+hardware engine可以pipeline 处理 多个 DMA requests. cudamemcpy做不到这一点.
+
+
+
+1. abstract all GPU op into a  set of vCTAs (virtual Cooperative Thread Array)
+2. 分析op图, 获得vcTA依赖关系.
+3. 根据依赖关系调度vCTAs across SMs 
+4. 生成 loop kernel code.
+
+
+
+#### 缺点
+
+1. figure10, 多节点, baseline 用superbench, 没用megatron, 会不会因为他们比不过megatron? GPT-2 他们也没说用多大的参数的,是large还是small.
+2. 实验都没测nvlink,但是现实中广泛用了nvlink.  
+3. Tensor-parallel Inference 只用了2个GPU, 因为他们的 fpga 硬件engine只支持两个GPU.
+4. kernel fusion 没法支持cudnn这些闭源的 kernel. ARK cannot schedule close-sourced binaries such as cuDNN.
+5. loop kernel 只能处理静态计算图,  动态计算图的优势是可以在搭建网络的时候看见变量的值，便于检查。 所以tf2.0也有动态图模式了.
+
+
+
+#### 优点
+
+1. Introduction和background写的很好. motivation阐明清晰.
+2. 提供了一个新的GPU DMA 想法.  这个系统别人可能都不会用, 但是或许给了GPU厂商启发, 之后就直接做了.  H100可能就有DMA,说  transfer large block to share memory.
+
