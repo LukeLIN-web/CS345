@@ -1,0 +1,69 @@
+==+== CS345 Paper Review Form
+==-== DO NOT CHANGE LINES THAT START WITH "==+==" UNLESS DIRECTED!
+==-== For further guidance, or to upload this file when you are done, go to:
+==-== https://hotcrp.kaust.edu.sa/cs345/offline
+
+==+== =====================================================================
+==+== Begin Review #39.
+==+== Reviewer: Juyi Lin <LINJ>
+
+==+== Paper #39
+==-== Title: Tutel: Adaptive Mixture-of-Experts At Scale
+
+==+== Review Readiness
+==-== Enter "Ready" if the review is ready for others to see:
+
+Ready
+
+==+== A. Overall merit
+==-== Choices:
+==-==    1. Reject
+==-==    2. Weak reject
+==-==    3. Weak accept
+==-==    4. Accept
+==-==    5. Strong accept
+==-== Enter the number of your choice:
+
+4
+
+==+== B. Paper summary
+
+MoE token routing dynamically determines the amount of expert workload at runtime. Existing systems suffer from inefficient computation because they can not adapt to the dynamic workload.
+TUTEL designs a layout that can be leveraged by switchable parallelism and dynamic pipelining methods. TUTEL enables adaptive parallelism/pipelining optimization at zero cost during runtime.
+TUTEL finally delivers 5.75× speedup of a single MoE layer over 2,048 A100 GPUs.
+
+
+==+== C. Strengths
+==-==    What are the paper’s strengths? Just a couple sentences, please.
+
+
+1. TUTEL is efficient and effective.
+2. TUTEL introduces how they implement the TWO-DIMENSIONAL HIERARCHICAL (2DH) ALL-TO-ALL algorithm in the appendix.
+3. They analyze the communication complexity of MoE parallelism and summarize two possibly optimal parallelism methods. 
+
+
+==+== D. Weaknesses
+==-==    What are the paper’s weaknesses? Just a couple sentences,
+==-==    please.
+
+1. It modifies NCCL all-to-all operations; it might not be compatible with future NCCL versions.
+2. The symbols are not easy to understand. 
+
+==+== E. Detailed comments
+
+Strengths
+1. On efficiency, TUTEL accelerates SwinV2-MoE, achieving up to 1.55× and 2.11× speedup in training and inference over Fairseq, respectively. On effectiveness, the SwinV2-MoE model achieves superior accuracy in both pre-training and downstream tasks compared to the counterpart dense model.
+2. TUTEL proposes adaptive pipelining to optimize pipeline and all-to-all algorithm.
+3. It uses the ZeRO-DP Stage-3 Partitioning and kernel Optimization: Fast Encode and Decode to optimize GPU memory usage.
+4. It is open-source.
+5. It is difficult to predict the communication-computation overlap in DNN training frameworks, making it challenging to propose a performance model. Therefore, they utilize dictionary mapping.
+
+
+Weaknesses
+1. The symbols are hard to understand. It doesn't distinguish tensor parallelism vs MP. For my understanding, expert parallelism is also a part of model parallelism. 
+
+
+
+==+== Scratchpad (for unsaved private notes)
+
+==+== End Review
