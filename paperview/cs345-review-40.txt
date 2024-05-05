@@ -1,0 +1,66 @@
+==+== CS345 Paper Review Form
+==-== DO NOT CHANGE LINES THAT START WITH "==+==" UNLESS DIRECTED!
+==-== For further guidance, or to upload this file when you are done, go to:
+==-== https://hotcrp.kaust.edu.sa/cs345/offline
+
+==+== =====================================================================
+==+== Begin Review #40.
+==+== Reviewer: Juyi Lin <LINJ>
+
+==+== Paper #40
+==-== Title: Efficient Memory Management for Large Language Model Serving
+==-==        with Paged Attention
+
+==+== Review Readiness
+==-== Enter "Ready" if the review is ready for others to see:
+
+Ready
+
+==+== A. Overall merit
+==-== Choices:
+==-==    1. Reject
+==-==    2. Weak reject
+==-==    3. Weak accept
+==-==    4. Accept
+==-==    5. Strong accept
+==-== Enter the number of your choice:
+
+5
+
+==+== B. Paper summary
+
+The existing large language model system requires huge memory for the key-value cache. This memory is dynamically changing, so it can be significantly wasted by fragmentation and redundant duplication, limiting the batch size. The authors propose PagedAttention to manage the key-value cache dynamically. On top of PagedAttention, they build vLLM. This LLM serving system achieves (1) near-zero waste in KV cache memory and (2) flexible sharing of KV cache within and across requests to further reduce memory usage. vLLM improves the throughput of popular LLMs by 2-4× with the same level of latency compared to SOTA systems.
+
+==+== C. Strengths
+==-==    What are the paper’s strengths? Just a couple sentences, please.
+
+1. The memory page is a well-developed solution in the Operating System. vLLM is the first paper to introduce this idea in the LLM system.
+2. It is open source and easy to use.
+3. It could greatly increase LLM inference throughput.
+
+
+==+== D. Weaknesses
+==-==    What are the paper’s weaknesses? Just a couple sentences,
+==-==    please.
+
+1. It is not suitable when there are few input batches.
+2. It doesn't present the accuracy evaluation results. 
+
+
+==+== E. Detailed comments
+
+Strengths
+1. It is open source and achieves results reproduced in Artifact evaluation. It is easy to use because it integrates with OpenAI API and Hugging Face models. Therefore, it is widely used by other researchers.
+2. Because vLLM decreases GPU memory usage, it can increase batch size. When a lot of batches continuously arrive, vLLM can increase the inference throughput.
+
+
+Weaknesses
+
+1. I don't understand the meaning of the annotation "Parameter size" in Figure 1 right. 
+2. Introduced new KVcache mapping. When individual users input few batches, the latency might be higher.
+3. The model doesn't prove that it has the same effect as the original model because it implements its own tokenizer. There might be some bugs. They claim that "without affecting the model accuracy at all" in Section 1. However they don't present the accuracy evaluation results. 
+
+
+==+== Scratchpad (for unsaved private notes)
+
+==+== End Review

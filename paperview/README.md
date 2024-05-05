@@ -1,4 +1,4 @@
-
+有ipad的话可以用paperpile app, 可以和电脑端同步, ipad画的东西可以显示在电脑端. 
 
 对论文comment: 
 
@@ -543,4 +543,36 @@ megablocks 是专家数大于 gpu 数。tutel是gpu大于专家数.
  表 2：似乎 MoE 开销=Comp. 开销 +all2all 开销。数学适用于前两列，但为什么不适用于第三列呢？作者可以讨论这个问题
 
 5.3 中的准确性比较是否相关，考虑到它们多次声明事物是等效的（“可切换并行性应保证 MoE 培训的数据布局和执行流程相同”）？Is the accuracy comparison in 5.3 even relevant, considering that they state multiple times that things are equivalent ("switchable parallelism should guarantee the same data layout and execution flow of MoE training.")?
+
+### vllm
+
+vLLM 允许共享某些解码方法的 KV 缓存。例如，如果多个请求共享一个系统提示，则可以在 KV 缓存中跨请求共享此系统提示。我不清楚的是，vLLM 如何检测这些内存共享的机会？Does the user specify, for example, the prefix as a system prompt?
+
+挑战:
+
+1. 输出的size不确定. 
+
+2. batching的难点:到达时间不确定, 输入seq长度不确定. 
+
+在 specinfer 论文 figure7  中, 测出来 fast transformer per token latency 和vllm 差不多, 
+
+这可能就是为啥vllm在一些图中没有展示 fast transformer的结果.  也可能是因为并行度不够的时候vllm 没有效果. 如果是这样,  vllm这么多 page 换页甚至和fast transformer差不多, 很厉害.   vllm说了单线程的时候, 最多20%的latency 增加.  
+
+他们应该没有重写tokenizer, 因为这样要重新训练模型.应该只是一些参数不match hugging face. 
+
+parallel sampling, 一次sample多个,  输出多个让用户 选一个.   可以share KV cache. 他们用一个ref count 来指针有多少共享. 
+
+beam search.   也是  share 之前的block. 
+
+如果别的模型架构不一样, vllm就没法用. 重新写需要太多时间.    也不能用自己的model和 adapter weights. 
+
+
+
+
+
+#### 讨论
+
+DNN训练, tensor 大小是确定的, 也不需要vllm.
+
+serving DNN不好, 因为主要是compute bound.
 
