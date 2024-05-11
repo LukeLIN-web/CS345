@@ -226,7 +226,7 @@ actor模型 优缺点是啥?
 
 缺点: application 写起来麻烦, 需要重新写. 
 
-#### enso
+### enso
 
 Introduction 写的非常好. 
 
@@ -395,8 +395,6 @@ forward:  GPU0 broadcast 他有的参数,  伪代码好像说每个GPU拥有一�
 1. ZeRO++: Extremely Efficient Collective Communication for Giant Model Training, 发在ICLR, 多级 参数partition.  梯度/参数 压缩.
 
 2. MiCS: near-linear scaling for training gigantic model on public cloud. from AWS.  22年11月pVLDB, 当时李沐已经离职去startup了.  divide all devices into partition groups. each group holds a complete copy of the model states. 
-
-
 
 ### Alpa
 
