@@ -80,3 +80,22 @@ overleaf不太支持svg, 不要用png位图, 所以我 用pdf.
 
 bar可以用stack , 来画出多个因素. 
 
+```latex
+\begin{figure*} % \begin{figure*}就是整页. 
+\centering
+  \includegraphics[width=1\textwidth]{figures/throughput-1.pdf} 
+  \caption{throughput vs l1 footprint}
+  \label{fig:throughput}
+  \includegraphics[width=1\textwidth]{figures/throughput-1.pdf} %一个begin figure可以放两个图
+  \caption{throughput vs l1 footprint}
+\end{figure*}
+```
+
+
+
+放在latex的  图的字体  要调整大一点.
+
+可以看看AE 参考一下别人是怎么一键画图的, 不用excel画图. 别人的画图脚本.
+
+图总是越画越好的, 很需要细心, 耐心,  
+
